@@ -7,11 +7,15 @@ services:
       - "3000:3000"
     depends_on:
       - mongo
+    volumes:
+      - ./backend:/app-backend
   frontend:
     build:
       context: ./frontend
     ports:
       - "80:5173"
+    volumes:
+      - ./frontend:/app
   mongo:
     image: mongo:latest
     ports:
