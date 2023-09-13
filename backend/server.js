@@ -1,16 +1,17 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const expenseRoutes = require('./src/routes/expenseRoutes');
+
+const { MONGODB_URI, PORT } = require('./src/config/env');
 
 const app = express();
-const PORT = process.env.PORT || 3000;
 
-mongoose.connect('mongodb://mongo:27017/mydb', {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
+connectMongooseDb(mongoose);
+app.use('/expenses', expenseRoutes);
 
-app.get('/', (req, res) => {
-  res.send('Hello from Node.js backend!');
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).send('Something broke!');
 });
 
 app.listen(PORT, () => {
