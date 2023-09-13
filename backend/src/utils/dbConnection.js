@@ -1,3 +1,5 @@
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://mongo:27017/mydb';
+
 function connectMongooseDb(mongoose) {
     mongoose.connect(MONGODB_URI, {
         useNewUrlParser: true,
@@ -14,3 +16,5 @@ function connectMongooseDb(mongoose) {
         console.log('Mongoose disconnected');
     });
 }
+
+module.exports = connectMongooseDb;
