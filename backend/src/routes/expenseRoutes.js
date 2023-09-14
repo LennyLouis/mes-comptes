@@ -29,32 +29,47 @@ router.get('/:id', async (req, res, next) => {
 // POST a new expense
 router.post('/', async (req, res, next) => {
     try {
-        // Check if the category exists
-        if (req.body.category && !(await Category.findById(req.body.category))) {
-            return res.status(400).send('Category not found');
+        // Check if the categories exist
+        if (req.body.categories) {
+            for (let catId of req.body.categories) {
+                const categoryExists = await Category.findById(catId);
+                if (!categoryExists) {
+                    return res.status(400).send(`Category not found for ID: ${catId}`);
+                }
+            }
         }
 
         const newExpense = new Expense(req.body);
         const savedExpense = await newExpense.save();
         res.status(201).json(savedExpense);
     } catch (err) {
-        next(err);
+        return res.status(400).send('Category not found');
     }
 });
 
 // PUT (update) an expense by ID
 router.put('/:id', async (req, res, next) => {
     try {
-        // Check if the category exists
-        if (req.body.category && !(await Category.findById(req.body.category))) {
-            return res.status(400).send('Category not found');
+        let categories_list = [];
+        if (req.body.categories) {
+            for (let catId of req.body.categories) {
+                const categoryExists = await Category.findById(catId);
+                if (!categoryExists) {
+                    return res.status(400).send(`Category not found for ID: ${catId}`);
+                }
+                categories_list.push(catId);
+            }
         }
 
-        const updatedExpense = await Expense.findByIdAndUpdate(req.params.id, req.body, { new: true });
+        const updatedExpense = await Expense.findByIdAndUpdate(
+            req.params.id,
+            { ...req.body, categories: categories_list },
+            { new: true }
+        );
         if (!updatedExpense) return res.status(404).send('Expense not found');
         res.json(updatedExpense);
     } catch (err) {
-        next(err);
+        return res.status(400).send('Category not found');
     }
 });
 

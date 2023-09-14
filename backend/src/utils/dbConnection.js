@@ -1,4 +1,4 @@
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://mongo:27017/mydb';
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://mongo:27017/my-expenses';
 
 function connectMongooseDb(mongoose) {
     mongoose.connect(MONGODB_URI, {

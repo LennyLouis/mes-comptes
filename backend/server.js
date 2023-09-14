@@ -3,12 +3,14 @@ const mongoose = require('mongoose');
 const expenseRoutes = require('./src/routes/expenseRoutes');
 const categoryRoutes = require('./src/routes/categoryRoutes');
 const connectMongooseDb = require('./src/utils/dbConnection');
+const cors = require('cors');
 
 const PORT = process.env.PORT || 3000;
 const app = express();
 
 try { connectMongooseDb(mongoose) } catch (err) { console.log(err); }
 
+app.use(cors());
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }));
 
