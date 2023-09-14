@@ -5,12 +5,13 @@ const expenseSchema = new mongoose.Schema({
     name: String,
     description: String,
     price: Number,
+    currency: String,
     date: Date,
     paidBy: String,
-    categories: [{
+    category: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Category'
-    }]
+    }
 });
 
 module.exports = mongoose.model('Expense', expenseSchema);
